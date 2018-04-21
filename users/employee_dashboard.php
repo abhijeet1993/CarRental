@@ -9,6 +9,9 @@ session_start();
         <script type="text/javascript" src="../resources/jquery/jquery.validate.min.js"></script>
 
     </head>
+    <?php
+    include 'logout.php';
+    ?>
     <style>
         .name {
             color: white;
@@ -17,12 +20,12 @@ session_start();
     <script>
 
         $(document).ready(function () {
-            $("#add_car").click(function () {
-                 window.location.href = "add_carform.php";
+            $("#car_dashboard").click(function () {
+                window.location.href = "car_dashboard.php";
             });
-            
+
             $("#owner_dashboard").click(function () {
-                 window.location.href = "owner_dashboard.php";
+                window.location.href = "owner_dashboard.php";
             });
         });
     </script>
@@ -39,7 +42,7 @@ session_start();
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link add_car" href="#" id="add_car">Add Car</a>
+                        <a class="nav-link add_car" href="#" id="car_dashboard">Car Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link owner_dashboard" href="#" id="owner_dashboard">Owner Dashboard</a>
@@ -48,10 +51,10 @@ session_start();
                         <a class="nav-link" href="#">About</a>
                     </li>
                 </ul>
-                    <div class="row">
-                        <label for="" class="col-md-8 col-form-label name">Welcome <?php echo $_SESSION['user_name'] ?></label>
-                    </div>
-                    <button class="btn btn-secondary my-2 my-sm-0" type="button">Logout</button>
+                <div class="row">
+                    <label for="" class="col-md-8 col-form-label name">Welcome <?php echo $_SESSION['user_name'] ?></label>
+                </div>
+                <button class="btn btn-secondary my-2 my-sm-0" type="button" name="logout" id="logout">Logout</button>
             </div>
         </nav>
     </body>

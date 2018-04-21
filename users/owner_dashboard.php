@@ -3,6 +3,7 @@ session_start();
 
 include('../database/dbconfig.php');
 include('../database/mysql.php');
+
 ?>
 
 <html>
@@ -17,6 +18,9 @@ include('../database/mysql.php');
         <script type="text/javascript" src="../resources/jquery/jquery.dataTables.min.js"></script>
 
     </head>
+    <?php
+    include 'logout.php';
+    ?>
     <style>
         html,
         body {
@@ -76,7 +80,7 @@ include('../database/mysql.php');
                     <div class="form-group row">
                         <label for="" class="col-md-8 col-form-label name">Welcome <?php echo $_SESSION['user_name'] ?></label>
                     </div>
-                    <button class="btn btn-secondary my-2 my-sm-0" type="button" style="float:right">Logout</button>
+                    <button class="btn btn-secondary my-2 my-sm-0" type="button" name="logout" id="logout">Logout</button>
                 </form>
             </div>
         </nav>

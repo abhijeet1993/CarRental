@@ -26,9 +26,12 @@ if (!empty($user_details)) {
     $_SESSION['logintype'] = $user_details[0]['logintype'];
 
     $mysql->update_session_id($user_details[0]['cid'], $session_id);
-    
+
     if ($_SESSION['logintype'] == 2) {
         $location = "employee_dashboard.php";
+        header("Location: $location");
+    } elseif ($_SESSION['logintype'] == 1) {
+        $location = "customer_dashboard.php";
         header("Location: $location");
     }
 } else {

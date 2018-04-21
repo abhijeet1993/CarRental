@@ -3,7 +3,6 @@ session_start();
 
 include('../database/dbconfig.php');
 include('../database/mysql.php');
-
 if (!empty($_GET)) {
     if ($_GET['message'] == "wrong") {
         $message = "Something went wrong, please try again.";
@@ -22,6 +21,9 @@ if (!empty($_GET)) {
         <script type="text/javascript" src="../resources/jquery/jquery-ui.js"></script>
 
     </head>
+    <?php
+    include 'logout.php';
+    ?>
     <style>
         .name {
             color: white;
@@ -52,14 +54,14 @@ if (!empty($_GET)) {
             color:#00CC00; /* green */
         }
 
-        .ui-datepicker-calendar {
-            display: none;
-        }​
     </style>
     <script>
 
         $(document).ready(function () {
-
+            $('#lease_date').datepicker({
+                minDate: 1,
+                dateFormat: 'yy-mm-dd'
+            });
             $('#year').datepicker({
                 changeMonth: true,
                 changeYear: true,
@@ -96,6 +98,9 @@ if (!empty($_GET)) {
                     owner: {
                         required: true
                     },
+                    car_type: {
+                        required: true
+                    }
 
                 },
                 submitHandler: function (form) {
@@ -137,7 +142,7 @@ if (!empty($_GET)) {
                     <div class="form-group row">
                         <label for="" class="col-md-8 col-form-label name"><div style="color:white">Welcome <?php echo $_SESSION['user_name'] ?></div></label>
                     </div>
-                    <button class="btn btn-secondary my-2 my-sm-0" type="button" style="float:right">Logout</button>
+                    <button class="btn btn-secondary my-2 my-sm-0" type="button" name="logout" id="logout">Logout</button>
                 </form>
             </div>
         </nav>
@@ -163,6 +168,19 @@ if (!empty($_GET)) {
                     <div class="form-group ">
                         <label for="exampleInputEmail1">Weekly Rate</label>
                         <input type="text" class="form-control" id="weekly_rate" name="weekly_rate" aria-describedby="emailHelp" placeholder="Enter Weekly Rate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="car_type">Car Type</label>
+                        <select class="form-control custom-select" name="car_type" id="car_type">
+                            <option selected="" value="">Select an option</option>
+                            <option value="1">Compact</option>
+                            <option value="2">Large</option>
+                            <option value="3">SUV</option>
+                            <option value="4">Truck</option>
+                            <option value="5">Van</option>
+                            <option value="6">Medium</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -193,7 +211,7 @@ if (!empty($_GET)) {
 
                     <div class="form-group ">
                         <label for="exampleInputEmail1">Lease Date(Only if owner is Individual or Bank)</label>
-                        <input type="date" class="form-control" id="lease_date" name="lease_date" aria-describedby="emailHelp" placeholder="Enter Lease Date">
+                        <input type="text" class="form-control" id="lease_date" name="lease_date" aria-describedby="emailHelp" placeholder="Enter Lease Date">
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>

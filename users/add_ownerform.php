@@ -23,6 +23,9 @@ if (!empty($_GET)) {
         <script type="text/javascript" src="../resources/jquery/jquery-ui.js"></script>
 
     </head>
+    <?php
+    include 'logout.php';
+    ?>
     <style>
         .name {
             color: white;
@@ -127,7 +130,7 @@ if (!empty($_GET)) {
                     <div class="form-group row">
                         <label for="" class="col-md-8 col-form-label name" >Welcome <?php echo $_SESSION['user_name'] ?></label>
                     </div>
-                    <button class="btn btn-secondary my-2 my-sm-0" type="button" >Logout</button>
+                    <button class="btn btn-secondary my-2 my-sm-0" type="button" name="logout" id="logout">Logout</button>
                 </form>
             </div>
         </nav>

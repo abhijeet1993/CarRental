@@ -50,7 +50,6 @@ class mysql {
 //        echo "UPDATE customer SET session_id= null WHERE cid = $cid";die;
         $this->sth = $this->db->prepare("UPDATE customer SET session_id= null WHERE cid = $cid");
         $this->sth->execute();
-        sleep(1);
     }
 
     function add_owner($owner_details) {
@@ -90,23 +89,62 @@ class mysql {
     }
 
     function add_car($car_details) {
-
-//        echo "insert into car(model, cyear, daily_rate, weekly_rate, oid, lease_date) values('" . $car_details['car_model'] . "', '" . $car_details['year'] . "', '" . $car_details['daily_rate'] . "', '" . $car_details['weekly_rate'] . "', '" . $car_details['owner_id'] . "', '" . $car_details['lease_date'] . "')";
-//        die;
         if ($car_details['lease_date'] == '' || empty($car_details['lease_date'])) {
-            $this->sth = $this->db->prepare("insert into car(model, cyear, daily_rate, weekly_rate, oid, lease_date) values('" . $car_details['car_model'] . "', '" . $car_details['year'] . "', '" . $car_details['daily_rate'] . "', '" . $car_details['weekly_rate'] . "', '" . $car_details['owner_id'] . "', null)");
+//            echo "insert into car(model, cyear, daily_rate, weekly_rate, oid, lease_date, car_type) values('" . $car_details['car_model'] . "', '" . $car_details['year'] . "', '" . $car_details['daily_rate'] . "', '" . $car_details['weekly_rate'] . "', '" . $car_details['owner_id'] . "', null," . $car_details['car_type'] . ")";
+//            die;
+            $this->sth = $this->db->prepare("insert into car(model, cyear, daily_rate, weekly_rate, oid, lease_date, car_type) values('" . $car_details['car_model'] . "', '" . $car_details['year'] . "', '" . $car_details['daily_rate'] . "', '" . $car_details['weekly_rate'] . "', '" . $car_details['owner_id'] . "', null," . $car_details['car_type'] . ")");
         } else {
-            $this->sth = $this->db->prepare("insert into car(model, cyear, daily_rate, weekly_rate, oid, lease_date) values('" . $car_details['car_model'] . "', '" . $car_details['year'] . "', '" . $car_details['daily_rate'] . "', '" . $car_details['weekly_rate'] . "', '" . $car_details['owner_id'] . "', '" . $car_details['lease_date'] . "')");
+//            echo "insert into car(model, cyear, daily_rate, weekly_rate, oid, lease_date, car_type) values('" . $car_details['car_model'] . "', '" . $car_details['year'] . "', '" . $car_details['daily_rate'] . "', '" . $car_details['weekly_rate'] . "', '" . $car_details['owner_id'] . "', '" . $car_details['lease_date'] . "', " . $car_details['car_type'] . ")";
+//            die;
+            $this->sth = $this->db->prepare("insert into car(model, cyear, daily_rate, weekly_rate, oid, lease_date, car_type) values('" . $car_details['car_model'] . "', '" . $car_details['year'] . "', '" . $car_details['daily_rate'] . "', '" . $car_details['weekly_rate'] . "', '" . $car_details['owner_id'] . "', '" . $car_details['lease_date'] . "', " . $car_details['car_type'] . ")");
         }
-//        $this->sth->bindValue(':MODEL', $car_details['car_model'], PDO::PARAM_STR);
-//        $this->sth->bindValue(':CYEAR', $car_details['year'], PDO::PARAM_STR);
-//        $this->sth->bindValue(':DAILY_RATE', $car_details['daily_rate'], PDO::PARAM_INT);
-//        $this->sth->bindValue(':WEEKLY_RATE', $car_details['weekly_rate'], PDO::PARAM_INT);
-//        $this->sth->bindValue(':OID', $car_details['owner_id'], PDO::PARAM_INT);
-//        $this->sth->bindValue(':LEASE_DATE', $car_details['lease_date'], PDO::PARAM_STR);
-
         $this->sth->execute();
         return $this->db->lastInsertId();
+    }
+
+    function get_busy_cars($rent_details, $where_condition, $return_date) {
+        $start_date = $rent_details['start_date'];
+//        echo "SELECT distinct(vid) FROM rents WHERE  '$start_date' between start_date and return_date or '$return_date' between start_date and return_date $where_condition";
+//        die;
+        $this->sth = $this->db->prepare("SELECT distinct(vid) FROM rents WHERE  '$start_date' between start_date and return_date or '$return_date' between start_date and return_date $where_condition");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_free_cars($where_condition) {
+//        echo "SELECT * FROM car $where_condition";
+//        die;
+        $this->sth = $this->db->prepare("SELECT * FROM car $where_condition");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_car_type_name($car_type) {
+//        echo "SELECT * FROM car_type where ctypeid = $car_type";
+//        echo '</br>';
+        $this->sth = $this->db->prepare("SELECT * FROM car_type where ctypeid = $car_type");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_car_by_vid($vid) {
+        $this->sth = $this->db->prepare("SELECT * FROM car where vid = $vid");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function insert_new_rental($rental_details) {
+        $this->sth = $this->db->prepare("insert into rents(vid, cid, oid, start_date, return_date, rental_type, car_type, total_cost) values('" . $rental_details['vid'] . "', '" . $rental_details['cid'] . "', '" . $rental_details['oid'] . "', '" . $rental_details['start_date'] . "', '" . $rental_details['return_date'] . "', '" . $rental_details['rental_type'] . "'," . $rental_details['car_type'] . "," . $rental_details['total_cost'] . ")");
+        $this->sth->execute();
+        return $this->db->lastInsertId();
+    }
+
+    function get_rental_details($cid) {
+//        echo "SELECT * FROM rents where cid = $cid and (start_date <= CURDATE() and return_date >= CURDATE())";
+//        die;
+        $this->sth = $this->db->prepare("SELECT * FROM rents where cid = $cid and (start_date <= CURDATE() and return_date >= CURDATE())");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
     }
 
 }

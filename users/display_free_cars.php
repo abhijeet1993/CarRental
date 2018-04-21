@@ -1,14 +1,11 @@
 <?php
 session_start();
+//echo '<pre>';
+//print_r($_SESSION);
+//exit();
 
 include('../database/dbconfig.php');
 include('../database/mysql.php');
-if (!empty($_GET)) {
-    if ($_GET['message'] == "car_created") {
-        $message = "Car Inserted";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-    }
-}
 ?>
 
 <html>
@@ -18,7 +15,6 @@ if (!empty($_GET)) {
         <link rel="stylesheet" href="../resources/css/jquery-ui.css">
         <link rel="stylesheet" href="../resources/css/jquery.dataTables.min.css">
         <script type="text/javascript" src="../resources/jquery/jquery-1.12.4.js"></script>
-        <script type="text/javascript" src="../resources/jquery/jquery.validate.min.js"></script>
         <script type="text/javascript" src="../resources/jquery/jquery-ui.js"></script>
         <script type="text/javascript" src="../resources/jquery/jquery.dataTables.min.js"></script>
 
@@ -36,27 +32,19 @@ if (!empty($_GET)) {
         }
         .dataTable {
             /*height: 100%;*/
-            margin: auto;
+            margin-top: 30px;
+            margin-left: 200px;
             /*            display: flex;
                         justify-content: center;
                         align-items: center;*/
         }
 
-        .add_car_div{
-            margin-top: 10px;
-            margin-right: 20px;
-        }
     </style>
 
     <script>
         $(document).ready(function () {
-            $("#owner_dashboard").click(function () {
-                window.location.href = "owner_dashboard.php";
-            });
-            $("#add_car").click(function () {
-                window.location.href = "add_carform.php";
-            });
-            $('#car_table').dataTable();
+            $('#rents_table').dataTable();
+
         });
     </script>
     <body>
@@ -68,69 +56,66 @@ if (!empty($_GET)) {
 
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
                     <li class="nav-item active">
-                        <a class="nav-link car_dashboard" href="#" id="car_dashboard">Car Dashboard</a>
+                        <a class="nav-link rent_car" href="#" id="rent_car">Rent Car</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link owner_dashboard" href="#" id="owner_dashboard">Owner Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
+
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <div class="form-group row">
                         <label for="" class="col-md-8 col-form-label name"><div style="color:white">Welcome <?php echo $_SESSION['user_name'] ?></div></label>
                     </div>
-                    <button class="btn btn-secondary my-2 my-sm-0" type="button"  name="logout" id="logout">Logout</button>
+                    <button class="btn btn-secondary my-2 my-sm-0" type="button" name="logout" id="logout">Logout</button>
                 </form>
             </div>
         </nav>
-        <div class="add_car_div">
-            <button type="button" class="btn btn-primary btn-lg add_car" style="float: right" id="add_car">Add Car</button>
-        </div>
         <div class="col-lg-9 dataTable">
-            <table class="table table-hover" id="car_table">
+            <table class="table table-hover" id="rents_table">
                 <thead>
                     <tr>
+                        <?php
+                        if ($_SESSION['rental_type'] == 1) {
+                            
+                            $rental_type = 'Weekly Rate';
+                        } else {
+                            $rental_type = 'Daily Rate';
+                        }
+                        ?>
                         <th scope="col">Sr. No.</th>
                         <th scope="col">Car Model</th>
                         <th scope="col">Car Type</th>
-                        <th scope="col">Daily Rate</th>
-                        <th scope="col">Weekly Rate</th>
-                        <th scope="col">Owner</th>
-                        <th scope="col">Manufacturing Year</th>
+                        <th scope="col"><?php echo $rental_type; ?></th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">Return Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $mysql = new mysql($db);
 
-                    $car_details = $mysql->get_all_cars();
-//                    echo '<pre>';
-//                    print_r($owner_details);
-//                    die;
-                    for ($i = 0; $i < count($car_details); $i++) {
+                    $free_cars = $_SESSION['free_cars'];
+                    for ($i = 0; $i < count($free_cars); $i++) {
                         if ($i % 2 == 0) {
                             $row = "table-active";
                         } else {
                             $row = "table-default";
                         }
-                        $owner_name = $mysql->get_owner_name_by_oid($car_details[$i]['oid']);
-                        $car_type = $mysql->get_car_type_name($car_details[$i]['car_type']);
+                        $car_type = $mysql->get_car_type_name($free_cars[$i]['car_type']);
+                        if ($_SESSION['rental_type'] == 1) {
+                            $rate = $free_cars[$i]['weekly_rate'];
+                        } else {
+                            $rate = $free_cars[$i]['daily_rate'];
+                        }
                         ?>
-                        <tr class="<?php echo $row; ?>" id=<?php echo $car_details[$i]['vid']; ?>>
+                        <tr class="<?php echo $row; ?>" id=<?php echo $free_cars[$i]['vid']; ?>>
                             <th><?php echo $i + 1 ?></th>
-                            <td><?php echo $car_details[$i]['model']; ?></td>
+                            <td><?php echo $free_cars[$i]['model']; ?></td>
                             <td><?php echo $car_type[0]['ctype']; ?></td>
-                            <td><?php echo $car_details[$i]['daily_rate']; ?></td>
-                            <td><?php echo $car_details[$i]['weekly_rate']; ?></td>
-                            <td><?php echo $owner_name[0]['owner_name']; ?></td>
-                            <td><?php echo $car_details[$i]['cyear']; ?></td>
-
+                            <td><?php echo $rate; ?></td>
+                            <td><?php echo $_SESSION['start_date']; ?></td>
+                            <td><?php echo $_SESSION['return_date']; ?></td>
+                            <td><a href="book_carform.php?vid=<?php echo $free_cars[$i]['vid'] ?>">Book Car</a></td>
                         </tr>
                         <?php
                     }
@@ -138,6 +123,5 @@ if (!empty($_GET)) {
                 </tbody>
             </table>
         </div>
-
     </body>
 </html>

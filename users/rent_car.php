@@ -34,8 +34,13 @@ $_SESSION['return_date'] = $return_date;
 $mysql = new mysql($db);
 
 $busy_cars = $mysql->get_busy_cars($rent_details, $where_condition, $return_date);
+$temp_array = array();
+foreach ($busy_cars as $key => $value) {
+    array_push($temp_array, $value[0]);
+}
+//print_r($temp_array);
+$busy_cars_string = implode(',', $temp_array);
 
-$busy_cars_string = implode(',', $busy_cars[0]);
 if (empty($busy_cars_string) || $busy_cars_string == '') {//no cars are busy
     $not_in = '';
     if ($rent_details['car_type'] != 7) {//all car types are allowed

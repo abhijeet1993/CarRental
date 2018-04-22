@@ -88,7 +88,7 @@ include('../database/mysql.php');
             <button type="button" class="btn btn-primary btn-lg add_owner" style="float: right" id="add_owner">Add Owner</button>
         </div>
         <div class="col-lg-9 dataTable">
-            <table class="table table-hover" id="car_table">
+            <table class="table table-hover" id="owner_table">
                 <thead>
                     <tr>
                         <th scope="col">Sr. No.</th>

@@ -134,15 +134,28 @@ class mysql {
     }
 
     function insert_new_rental($rental_details) {
-        $this->sth = $this->db->prepare("insert into rents(vid, cid, oid, start_date, return_date, rental_type, car_type, total_cost) values('" . $rental_details['vid'] . "', '" . $rental_details['cid'] . "', '" . $rental_details['oid'] . "', '" . $rental_details['start_date'] . "', '" . $rental_details['return_date'] . "', '" . $rental_details['rental_type'] . "'," . $rental_details['car_type'] . "," . $rental_details['total_cost'] . ")");
+        $this->sth = $this->db->prepare("insert into rents(vid, cid, oid, start_date, return_date, rental_type, car_type, total_cost, paid) values('" . $rental_details['vid'] . "', '" . $rental_details['cid'] . "', '" . $rental_details['oid'] . "', '" . $rental_details['start_date'] . "', '" . $rental_details['return_date'] . "', '" . $rental_details['rental_type'] . "'," . $rental_details['car_type'] . "," . $rental_details['total_cost'] . ", 2)");
         $this->sth->execute();
         return $this->db->lastInsertId();
     }
 
-    function get_rental_details($cid) {
+    function get_rental_details_by_cid($cid) {
 //        echo "SELECT * FROM rents where cid = $cid and (start_date <= CURDATE() and return_date >= CURDATE())";
 //        die;
         $this->sth = $this->db->prepare("SELECT * FROM rents where cid = $cid and (start_date <= CURDATE() and return_date >= CURDATE())");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_other_rental_details($where_condition) {
+        $this->sth = $this->db->prepare("SELECT * FROM rents $where_condition");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_rental_details_by_rid($rid) {
+
+        $this->sth = $this->db->prepare("SELECT * FROM rents where rid = $rid");
         $this->sth->execute();
         return $this->sth->fetchAll();
     }

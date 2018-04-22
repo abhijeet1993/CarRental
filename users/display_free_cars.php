@@ -44,7 +44,9 @@ include('../database/mysql.php');
     <script>
         $(document).ready(function () {
             $('#rents_table').dataTable();
-
+            $('#active_rentals').click(function () {
+                window.location.href = 'customer_dashboard.php';
+            });
         });
     </script>
     <body>
@@ -56,7 +58,14 @@ include('../database/mysql.php');
 
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
+                        <a class="nav-link active_rentals" href="#" id="active_rentals">Active and Other Rentals</a>
+                    </li>
+
+<!--                    <li class="nav-item">
+                        <a class="nav-link past_rentals" href="#" id="past_rentals">Past Rentals</a>
+                    </li>-->
+                    <li class="nav-item">
                         <a class="nav-link rent_car" href="#" id="rent_car">Rent Car</a>
                     </li>
 
@@ -75,7 +84,7 @@ include('../database/mysql.php');
                     <tr>
                         <?php
                         if ($_SESSION['rental_type'] == 1) {
-                            
+
                             $rental_type = 'Weekly Rate';
                         } else {
                             $rental_type = 'Daily Rate';

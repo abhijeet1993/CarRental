@@ -1,11 +1,11 @@
 <?php
 session_start();
-if (!empty($_GET)) {
-    if ($_GET['message'] == "wrong") {
-        $message = "Something went wrong, please try again!";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-    }
-}
+include('../database/dbconfig.php');
+include('../database/mysql.php');
+
+$rental_id = $_GET['rid'];
+$mysql = new mysql($db);
+$rent_details = $mysql->get_rental_details_by_rid($rental_id);
 ?>
 
 <html>
@@ -86,8 +86,8 @@ if (!empty($_GET)) {
             $('#active_rentals').click(function () {
                 window.location.href = 'customer_dashboard.php';
             });
-            $('#past_rentals').click(function () {
-                window.location.href = 'past_rentals.php';
+            $('#rent_car').click(function () {
+                window.location.href = 'rent_carform.php';
             });
         });
     </script>
@@ -103,11 +103,7 @@ if (!empty($_GET)) {
                     <li class="nav-item">
                         <a class="nav-link active_rentals" href="#" id="active_rentals">Active and Other Rentals</a>
                     </li>
-
-<!--                    <li class="nav-item">
-                        <a class="nav-link past_rentals" href="#" id="past_rentals">Past Rentals</a>
-                    </li>-->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link rent_car" href="#" id="rent_car">Rent Car</a>
                     </li>
 
@@ -127,17 +123,8 @@ if (!empty($_GET)) {
                 <fieldset>
                     <legend>Rent Car</legend>
                     <div class="form-group">
-                        <label for="car_type">Select Car Type</label>
-                        <select class="form-control custom-select" name="car_type" id="car_type">
-                            <option selected="" value="">Select an option</option>
-                            <option value="1">Compact</option>
-                            <option value="2">Large</option>
-                            <option value="3">SUV</option>
-                            <option value="4">Truck</option>
-                            <option value="5">Van</option>
-                            <option value="6">Medium</option>
-                            <option value="7">All</option>
-                        </select>
+                        <label for="car_type">Car Model</label>
+                        <input type="radio" class="form-check-input" name="car_model" id="car_model" value="<?php ?>" checked="">
                     </div>
                     <fieldset class="form-group">
                         <label for="">Rental Type</label>
@@ -170,3 +157,4 @@ if (!empty($_GET)) {
         </div>
     </body>
 </html>
+

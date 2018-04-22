@@ -1,4 +1,11 @@
 <?php
+session_start();
+//if (!empty($_SESSION)) {
+//    echo 'if';
+//} else {
+//    echo 'else';
+//}
+//die;
 if (!empty($_GET)) {
     if ($_GET['message'] == "wrong") {
         $message = "Wrong Credentials, Login again!";

@@ -34,6 +34,9 @@ if (!empty($user_details)) {
     } elseif ($_SESSION['logintype'] == 1) {
         $location = "customer_dashboard.php";
         header("Location: $location");
+    } elseif ($_SESSION['logintype'] == 3) {
+        $location = "owner_dashboard.php";
+        header("Location: $location");
     }
 } else {
     $location = "../index.php";

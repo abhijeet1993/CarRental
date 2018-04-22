@@ -160,4 +160,28 @@ class mysql {
         return $this->sth->fetchAll();
     }
 
+    function update_rents_paid_by_rid($rid) {
+        $this->sth = $this->db->prepare("UPDATE rents SET paid=1 WHERE rid =$rid");
+        return $this->sth->execute();
+    }
+
+    function edit_car($car_details) {
+        //        echo "UPDATE car SET model = '" . $car_details['car_model'] . "', year = '" . $car_details['year'] . "', car_type = '" . $car_details['car_type'] . "', daily_rate = '" . $car_details['daily_rate'] . "', weekly_rate = '" . $car_details['weekly_rate'] . "', oid = '" . $car_details['owner_id'] . "', lease_date = '" . $car_details['lease_date'] . "' WHERE vid =" . $car_details['vid'];
+        //        die;
+        $this->sth = $this->db->prepare("UPDATE car SET model = '" . $car_details['car_model'] . "', cyear = '" . $car_details['year'] . "', car_type = '" . $car_details['car_type'] . "', daily_rate = '" . $car_details['daily_rate'] . "', weekly_rate = '" . $car_details['weekly_rate'] . "', oid = '" . $car_details['owner_id'] . "', lease_date = '" . $car_details['lease_date'] . "' WHERE vid =" . $car_details['vid']);
+        return $this->sth->execute();
+    }
+
+    function get_all_rentals() {
+        $this->sth = $this->db->prepare("SELECT * FROM rents");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_user_by_cid($cid) {
+        $this->sth = $this->db->prepare("SELECT * FROM customer where cid=$cid;");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
 }

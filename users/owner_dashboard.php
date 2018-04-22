@@ -4,7 +4,6 @@ session_start();
 include('../database/dbconfig.php');
 include('../database/mysql.php');
 include('../users/checksession.php');
-
 ?>
 
 <html>
@@ -65,16 +64,13 @@ include('../users/checksession.php');
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="employee_dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link car_dashboard" href="#" id="car_dashboard">Car Dashboard</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link owner_dashboard" href="#" id="owner_dashboard">Owner Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">

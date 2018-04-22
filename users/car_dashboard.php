@@ -8,6 +8,9 @@ if (!empty($_GET)) {
     if ($_GET['message'] == "car_created") {
         $message = "Car Inserted";
         echo "<script type='text/javascript'>alert('$message');</script>";
+    }else if ($_GET['message'] == "car_edited") {
+        $message = "Car Details Edited";
+        echo "<script type='text/javascript'>alert('$message');</script>";
     }
 }
 ?>
@@ -70,16 +73,13 @@ if (!empty($_GET)) {
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="employee_dashboard.php">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link car_dashboard" href="#" id="car_dashboard">Car Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link owner_dashboard" href="#" id="owner_dashboard">Owner Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
@@ -104,6 +104,7 @@ if (!empty($_GET)) {
                         <th scope="col">Weekly Rate</th>
                         <th scope="col">Owner</th>
                         <th scope="col">Manufacturing Year</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,6 +132,7 @@ if (!empty($_GET)) {
                             <td><?php echo $car_details[$i]['weekly_rate']; ?></td>
                             <td><?php echo $owner_name[0]['owner_name']; ?></td>
                             <td><?php echo $car_details[$i]['cyear']; ?></td>
+                            <td><a href="edit_carform.php?vid=<?php echo $car_details[$i]['vid']; ?>">Edit</a></td>
 
                         </tr>
                         <?php

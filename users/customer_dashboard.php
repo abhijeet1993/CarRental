@@ -8,6 +8,9 @@ if (!empty($_GET)) {
     if ($_GET['message'] == "rental_created") {
         $message = "Booking Confirmed";
         echo "<script type='text/javascript'>alert('$message');</script>";
+    } elseif ($_GET['message'] == 'payment') {
+        $message = "Payment Received";
+        echo "<script type='text/javascript'>alert('$message');</script>";
     }
 }
 ?>
@@ -120,8 +123,19 @@ if (!empty($_GET)) {
                             <td><?php echo $rental_details[$i]['start_date']; ?></td>
                             <td><?php echo $rental_details[$i]['return_date']; ?></td>
                             <td><?php echo $rental_details[$i]['total_cost']; ?></td>
-                            <td><?php echo ($rental_details[0]['paid'] == 2 ? "Not Paid" : "Paid"); ?></td>
-                            <td><a href="return_carform.php?rid=<?php echo $rental_details[$i]['rid'] ?>">Return Car</a></td>
+                            <td><?php echo ($rental_details[$i]['paid'] == 2 ? "Not Paid" : "Paid"); ?></td>
+                            <td>
+                                <?php
+                                if ($rental_details[$i]['paid'] == 2) {
+                                    ?>
+                                    <a href="return_carform.php?rid=<?php echo $rental_details[$i]['rid'] ?>">Return Car</a>
+                                <?php } else {
+                                    ?>
+                                    NA
+                                    <?php
+                                }
+                                ?>
+                            </td>
 
                         </tr>
                         <?php

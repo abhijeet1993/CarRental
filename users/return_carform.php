@@ -7,6 +7,9 @@ include('../users/checksession.php');
 $rental_id = $_GET['rid'];
 $mysql = new mysql($db);
 $rent_details = $mysql->get_rental_details_by_rid($rental_id);
+//echo '<pre>';
+//print_r($rent_details);
+//exit();
 ?>
 
 <html>
@@ -55,34 +58,8 @@ $rent_details = $mysql->get_rental_details_by_rid($rental_id);
 
     <script>
         $(document).ready(function () {
-            $('#start_date').datepicker({
-                minDate: 0,
-                dateFormat: 'yy-mm-dd'
-            });
-            $("#rent_car_form").validate({
-                errorClass: "my-error-class",
-                validClass: "my-valid-class",
-                rules: {
-                    car_type: {
-                        required: true
-                    },
-                    rental_type: {
-                        required: true
-                    },
-                    weeks_or_days: {
-                        required: true,
-                        digits: true,
-                        min: 1
-                    },
-                    start_date: {
-                        required: true,
-                    }
 
-                },
-                submitHandler: function (form) {
-                    form.submit();
-                }
-            });
+
 
             $('#active_rentals').click(function () {
                 window.location.href = 'customer_dashboard.php';
@@ -119,41 +96,50 @@ $rent_details = $mysql->get_rental_details_by_rid($rental_id);
         </nav>
 
         <div class="container">
-            <!--<form action="new_user.php" method="POST">-->
-            <form action="rent_car.php" method="post" id="rent_car_form">
-                <fieldset>
-                    <legend>Rent Car</legend>
-                    <div class="form-group">
-                        <label for="car_type">Car Model</label>
-                        <input type="radio" class="form-check-input" name="car_model" id="car_model" value="<?php ?>" checked="">
-                    </div>
-                    <fieldset class="form-group">
-                        <label for="">Rental Type</label>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="rental_type" id="weekly" value="1" checked="">
-                                Weekly
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="rental_type" id="daily" value="2">
-                                Daily
-                            </label>
-                        </div>
+            <form action="return_car.php" method="post" id="book_car">
+                <div class="form-group">
+                    <fieldset>
+                        <legend>Payment Details</legend>
+                        <?php
+                        $car_details = $mysql->get_car_by_vid($rent_details[0]['vid']);
+//                        echo '<pre>';
+//                        print_r($car_details);
+//                        exit();
+                        ?>
+                        <label class="control-label" for="readOnlyInput">Car Model</label>
+                        <input class="form-control" id="car_model" name="car_model" type="text" placeholder="" readonly="" value="<?php echo $car_details[0]['model']; ?>">
                     </fieldset>
-                </fieldset>
-                <div class="form-group ">
-                    <label for="exampleInputEmail1">Number of Weeks Or Days</label>
-                    <input type="text" class="form-control" id="weeks_or_days" name="weeks_or_days" aria-describedby="emailHelp" placeholder="Enter number of days or weeks">
                 </div>
-                <div class="form-group ">
-                    <label for="exampleInputEmail1">Start Date</label>
-                    <input type="text" class="form-control" id="start_date" name="start_date" aria-describedby="emailHelp" placeholder="Enter Start Date">
+                <div class="form-group">
+                    <fieldset>
+                        <label class="control-label" for="readOnlyInput">Start Date</label>
+                        <input class="form-control" id="start_date" name="start_date" type="text" placeholder="" readonly="" value="<?php echo $rent_details[0]['start_date']; ?>">
+                        <input class="form-control" id="rid" name="rid" type="hidden" value="<?php echo $rent_details[0]['rid']; ?>">
+                    </fieldset>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-                </fieldset>
+                <div class="form-group">
+                    <fieldset>
+                        <label class="control-label" for="readOnlyInput">Return Date</label>
+                        <input class="form-control" id="return_date" name="return_date" type="text" placeholder="" readonly="" value="<?php echo $rent_details[0]['return_date']; ?>">
+                    </fieldset>
+                </div>
+
+                <div class="form-group">
+                    <fieldset>
+                        <label class="control-label" for="readOnlyInput">Rental Type</label>
+                        <input class="form-control" id="rental_type" name="rental_type" type="text" placeholder="" readonly="" value="<?php echo $rent_details[0]['rental_type']; ?>">
+                    </fieldset>
+                </div>
+
+                <div class="form-group">
+                    <fieldset>
+                        <label class="control-label" for="readOnlyInput">Total Cost</label>
+                        <input class="form-control" id="total_cost" name="total_cost" type="text" placeholder="" readonly="" value="<?php echo $rent_details[0]['total_cost']; ?>">
+                    </fieldset>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Pay and Return Car</button>
             </form>
         </div>
     </body>

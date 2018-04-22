@@ -1,10 +1,24 @@
 <?php
 session_start();
-//if (!empty($_SESSION)) {
-//    echo 'if';
-//} else {
-//    echo 'else';
-//}
+//echo '<pre>';
+//print_r($_SESSION);
+//exit();
+if (!empty($_SESSION)) {
+    if ($_SESSION['logintype'] == 1) {
+        $location = "users/customer_dashboard.php";
+        header("Location: $location?message=wrong");
+        ;
+    } else if (($_SESSION['logintype'] == 3)) {
+        $location = "users/owner_dashboard.php";
+        header("Location: $location?message=wrong");
+        ;
+    } else if (($_SESSION['logintype'] == 2)) {
+
+        $location = "users/employee_dashboard.php";
+        header("Location: $location?message=wrong");
+        ;
+    }
+}
 //die;
 if (!empty($_GET)) {
     if ($_GET['message'] == "wrong") {

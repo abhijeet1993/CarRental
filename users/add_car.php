@@ -1,7 +1,9 @@
 <?php
+session_start();
 
 include('../database/dbconfig.php');
 include('../database/mysql.php');
+include('../users/checksession.php');
 
 $car_details['car_model'] = trim($_POST['car_model']);
 $car_details['year'] = trim($_POST['year']);

@@ -3,6 +3,7 @@
 session_start();
 include('../database/dbconfig.php');
 include('../database/mysql.php');
+include('../users/checksession.php');
 //echo '<pre>';
 //print_r($_POST);
 //exit;

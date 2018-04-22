@@ -1,5 +1,6 @@
 <?php
 session_start();
+include('../users/checksession.php');
 ?>
 <html>
     <head>

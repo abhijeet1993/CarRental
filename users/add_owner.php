@@ -1,7 +1,9 @@
 <?php
+session_start();
 
 include('../database/dbconfig.php');
 include('../database/mysql.php');
+include('../users/checksession.php');
 
 $owner_details['full_name'] = trim($_POST['full_name']);
 $owner_details['email'] = trim($_POST['email']);

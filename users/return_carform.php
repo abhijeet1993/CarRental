@@ -2,6 +2,7 @@
 session_start();
 include('../database/dbconfig.php');
 include('../database/mysql.php');
+include('../users/checksession.php');
 
 $rental_id = $_GET['rid'];
 $mysql = new mysql($db);

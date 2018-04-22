@@ -6,6 +6,7 @@ session_start();
 
 include('../database/dbconfig.php');
 include('../database/mysql.php');
+include('../users/checksession.php');
 ?>
 
 <html>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+include('../users/checksession.php');
 if (!empty($_GET)) {
     if ($_GET['message'] == "email") {
         $message = "Email already exists, try another email.";

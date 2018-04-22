@@ -1,6 +1,7 @@
 <?php
 
 include("../app_top.php");
+include('../users/checksession.php');
 require_once '../database/mysql.php';
 //echo '<pre>';
 //print_r($_POST);

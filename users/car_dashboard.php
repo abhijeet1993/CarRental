@@ -3,6 +3,7 @@ session_start();
 
 include('../database/dbconfig.php');
 include('../database/mysql.php');
+include('../users/checksession.php');
 if (!empty($_GET)) {
     if ($_GET['message'] == "car_created") {
         $message = "Car Inserted";

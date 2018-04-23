@@ -7,9 +7,8 @@ if (!empty($_SESSION)) {
     if ($_SESSION['logintype'] == 1) {
         $location = "users/customer_dashboard.php";
         header("Location: $location?message=wrong");
-        
     } else if (($_SESSION['logintype'] == 3)) {
-        $location = "users/owner_dashboard.php";
+        $location = "users/owner_login_dashboard.php";
         header("Location: $location?message=wrong");
         ;
     } else if (($_SESSION['logintype'] == 2)) {
@@ -28,8 +27,7 @@ if (!empty($_GET)) {
         echo "<script type='text/javascript'>alert('Account created, please login');</script>";
     } elseif ($_GET['message'] == "session") {
         echo "<script type='text/javascript'>alert('You have been logged out of other active sessions, please login again');</script>";
-    }
-    elseif ($_GET['message'] == "Please_login") {
+    } elseif ($_GET['message'] == "Please_login") {
         echo "<script type='text/javascript'>alert('please login');</script>";
     }
 }

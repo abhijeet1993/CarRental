@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 include('../database/dbconfig.php');
@@ -8,7 +9,9 @@ include('../users/checksession.php');
 $owner_details['full_name'] = trim($_POST['full_name']);
 $owner_details['email'] = trim($_POST['email']);
 $owner_details['owner_type'] = trim($_POST['owner_type']);
-;
+$pass = explode("@", $owner_details['email']);
+
+$owner_details['password'] = $pass[0];
 $mysql = new mysql($db);
 
 $owner_check_email = $mysql->get_owner_by_email($owner_details['email']);

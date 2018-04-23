@@ -53,11 +53,11 @@ class mysql {
     }
 
     function add_owner($owner_details) {
-        $this->sth = $this->db->prepare("insert into owner(owner_name, email, owner_type) values(:OWNER_NAME, :EMAIL, :OWNER_TYPE)");
+        $this->sth = $this->db->prepare("insert into owner(owner_name, email, owner_type, password) values(:OWNER_NAME, :EMAIL, :OWNER_TYPE, :PASSWORD)");
         $this->sth->bindValue(':OWNER_NAME', $owner_details['full_name'], PDO::PARAM_STR);
         $this->sth->bindValue(':EMAIL', $owner_details['email'], PDO::PARAM_STR);
         $this->sth->bindValue(':OWNER_TYPE', $owner_details['owner_type'], PDO::PARAM_INT);
-
+        $this->sth->bindValue(':PASSWORD', $owner_details['password'], PDO::PARAM_STR);
         $this->sth->execute();
         return $this->db->lastInsertId();
     }
@@ -180,6 +180,63 @@ class mysql {
 
     function get_user_by_cid($cid) {
         $this->sth = $this->db->prepare("SELECT * FROM customer where cid=$cid;");
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function validate_owner_login($email, $password) {
+//        echo "SELECT * FROM owner WHERE email = $email and password = $password";
+//        die;
+        $this->sth = $this->db->prepare("SELECT * FROM owner WHERE email = '" . $email . "' and password = '" . $password . "'");
+
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_rental_details_by_oid($oid) {
+        $this->sth = $this->db->prepare("SELECT * FROM rents WHERE oid = $oid");
+
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_rentals_weekly_reports_car_type($details) {
+        $oid = $details['oid'];
+        $car_type = $details['car_type'];
+        if ($car_type == 7) {
+            $car_type_string = '';
+        } else {
+            $car_type_string = 'and car_type = ' . $details['car_type'];
+        }
+        $start_date = $details['start_date'];
+//        echo "SELECT * FROM rents WHERE oid = $oid and start_date between '$start_date' and  DATE_ADD('$start_date', INTERVAL 7 DAY) $car_type_string";
+//        die;
+        $this->sth = $this->db->prepare("SELECT * FROM rents WHERE oid = $oid and start_date between '$start_date' and  DATE_ADD('$start_date', INTERVAL 7 DAY) $car_type_string");
+
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_car_by_oid($oid) {
+        $this->sth = $this->db->prepare("SELECT * FROM car WHERE oid = $oid");
+
+        $this->sth->execute();
+        return $this->sth->fetchAll();
+    }
+
+    function get_rentals_weekly_reports_car($details) {
+        $oid = $details['oid'];
+        $car_type = $details['car'];
+        if ($car_type == "all") {
+            $car_type_string = '';
+        } else {
+            $car_type_string = 'and vid = ' . $details['car'];
+        }
+        $start_date = $details['start_date'];
+//        echo "SELECT * FROM rents WHERE oid = $oid and start_date between '$start_date' and  DATE_ADD('$start_date', INTERVAL 7 DAY) $car_type_string";
+//        die;
+        $this->sth = $this->db->prepare("SELECT * FROM rents WHERE oid = $oid and start_date between '$start_date' and  DATE_ADD('$start_date', INTERVAL 7 DAY) $car_type_string");
+
         $this->sth->execute();
         return $this->sth->fetchAll();
     }
